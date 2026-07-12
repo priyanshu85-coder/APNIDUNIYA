@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./Sidebar.css";
 
 function Sidebar({
@@ -12,26 +13,59 @@ function Sidebar({
     isSidebarOpen,
     setIsSidebarOpen,
 }) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        function checkMobile() {
+            setIsMobile(window.innerWidth <= 768);
+        }
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    function closeSidebar() {
+        if (isMobile) {
+            setIsSidebarOpen(false);
+        }
+    }
+
     function toggleCharacter(character) {
         const exists = selectedCharacters.some(
             (item) => (item.id && character.id && item.id === character.id) || item.name === character.name
         );
 
+        let nextSelection;
         if (exists) {
-            setSelectedCharacters((prev) => prev.filter((item) => item.name !== character.name));
+            nextSelection = selectedCharacters.filter((item) => item.name !== character.name);
         } else {
-            setSelectedCharacters((prev) => [...prev, character]);
+            nextSelection = [...selectedCharacters, character];
         }
 
-        setIsChatOpen(false);
+        setSelectedCharacters(nextSelection);
+        setIsChatOpen(nextSelection.length > 0);
+        closeSidebar();
     }
 
     return (
         <div className={`sidebar ${isSidebarOpen ? "" : "collapsed"}`}>
-            <h2>Characters</h2>
+            <div className="sidebarHeader">
+                <h2>Characters</h2>
+                <button type="button" className="sidebarCloseBtn" onClick={closeSidebar}>
+                    ✕
+                </button>
+            </div>
 
             {selectedCharacters.length > 0 && !isChatOpen && (
-                <button type="button" className="openChatButton" onClick={onOpenChat}>
+                <button
+                    type="button"
+                    className="openChatButton"
+                    onClick={() => {
+                        onOpenChat();
+                        closeSidebar();
+                    }}
+                >
                     Open Chat
                 </button>
             )}
