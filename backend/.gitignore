@@ -2,3 +2,17 @@ venv/
 .env
 __pycache__/
 *.pyc
+# Temporary data
+session.json
+chat_history.json
+character.json
+
+# JSON data folder
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
