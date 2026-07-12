@@ -1,0 +1,101 @@
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: Arial;
+}
+
+body {
+
+  background: #202123;
+  background-image: url("../public/apni.png");
+
+  color: white;
+}
+
+.mobileToolbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.08); */
+}
+
+.mobileSidebarToggle {
+  border: none;
+  background: linear-gradient(135deg, #10a37f, #0d8a6a);
+  color: white;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.container {
+
+  display: flex;
+
+  height: 100vh;
+
+  overflow: hidden;
+  /* background-image: url("../public/apni.png"); */
+
+}
+
+.main {
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.chatPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-image: url("../public/apni.png"); */
+
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+  height: 100%;
+  color: #f3f4f6;
+}
+
+.chatPrompt h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  background-image: url("../public/apni2.png");
+
+}
+
+.chatPrompt p {
+  margin: 0;
+  max-width: 420px;
+  color: #d1d5db;
+}
+
+.chatPrompt button {
+  border: none;
+  background: linear-gradient(135deg, #10a37f, #0d8a6a);
+  color: white;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: 100dvh;
+  }
+}

@@ -1,0 +1,46 @@
+.user {
+    background: linear-gradient(135deg, #10a37f, #0d8a6a);
+    padding: 12px 14px;
+    margin: 8px 0 8px auto;
+    border-radius: 16px 16px 4px 16px;
+    max-width: min(85%, 720px);
+    color: white;
+    align-self: flex-end;
+    box-shadow: 0 4px 12px rgba(16, 163, 127, 0.25);
+    word-break: break-word;
+}
+
+.ai {
+    background: rgba(68, 70, 84, 0.95);
+    padding: 12px 14px;
+    margin: 8px 0;
+    border-radius: 16px 16px 16px 4px;
+    max-width: min(85%, 720px);
+    color: white;
+    align-self: flex-start;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    word-break: break-word;
+}
+
+.user strong,
+.ai strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.user p,
+.ai p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+
+    .user,
+    .ai {
+        max-width: 100%;
+        padding: 11px 12px;
+    }
+}

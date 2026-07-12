@@ -1,0 +1,111 @@
+.chatContainer {
+    height: min(100vh - 70px, 900px);
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: white;
+    overflow: hidden;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+    background-image: url("../public/apni2.png");
+
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    /* border-bottom: 1px solid rgba(255, 255, 255, 0.12); */
+    /* background: rgba(32, 33, 35, 0.95); */
+}
+
+.chatHeader span {
+    font-weight: 600;
+    color: #f3f4f6;
+    flex: 1;
+}
+
+.chatHeader button {
+    background: linear-gradient(135deg, #10a37f, #0d8a6a);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.messages {
+    flex: 1;
+    min-height: 0;
+    padding: 20px 20px 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+}
+
+.messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #d1d5db;
+    text-align: center;
+    padding: 24px;
+}
+
+.emptyState h3 {
+    margin: 0;
+    color: white;
+}
+
+.emptyState p {
+    margin: 0;
+    opacity: 0.85;
+}
+
+.typing,
+.loader {
+    padding: 10px 14px;
+    color: #d1d5db;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .chatContainer {
+        height: calc(100dvh - 60px);
+        border-radius: 0;
+    }
+
+    .chatHeader {
+        padding: 12px 14px;
+        flex-wrap: wrap;
+    }
+
+    .chatHeader span {
+        font-size: 0.95rem;
+    }
+
+    .messages {
+        padding: 12px 12px 8px;
+    }
+}

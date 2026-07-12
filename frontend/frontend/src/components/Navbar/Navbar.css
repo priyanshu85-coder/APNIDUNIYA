@@ -1,0 +1,31 @@
+.navbar {
+
+    height: 70px;
+
+    
+     justify-content: center;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 24px;
+
+    color: rgb(25, 16, 156);
+
+    /* border-bottom: 1px solid rgba(43, 14, 157, 0.08); */
+
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18); */
+}
+
+.navbar h2 {
+    
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    background: linear-gradient(90deg, #3C8EF1, #7E6FF0, #C16AF3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
