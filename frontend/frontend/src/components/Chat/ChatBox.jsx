@@ -52,8 +52,8 @@ function ChatBox({ characters }) {
             <div className="messages">
                 {messages.length === 0 ? (
                     <div className="emptyState">
-                        <h3>Start a conversation</h3>
-                        <p>Choose a character or talk to all selected ones.</p>
+                        {/* <h3>Start a conversation</h3> */}
+                        {/* <p>Choose a character or talk to all selected ones.</p> */}
                     </div>
                 ) : (
                     messages.map((msg, index) => (
