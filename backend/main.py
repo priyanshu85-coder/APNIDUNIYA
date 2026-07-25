@@ -25,7 +25,10 @@ app.add_middleware(
 app.include_router(character_router)
 app.include_router(chat_router)
 app.include_router(auth_router)
-
+# for heaalth check 
+@app.get("/health")
+def health():
+    return {"status": "OK"}
 
 @app.on_event("startup")
 def startup_check():
