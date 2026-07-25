@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { FaCommentDots, FaEdit, FaPlus, FaTimes, FaTrashAlt, FaUserAstronaut } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -15,22 +14,8 @@ function Sidebar({
     isSidebarOpen,
     setIsSidebarOpen,
 }) {
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        function checkMobile() {
-            setIsMobile(window.innerWidth <= 768);
-        }
-
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
-    }, []);
-
     function closeSidebar() {
-        if (isMobile) {
-            setIsSidebarOpen(false);
-        }
+        setIsSidebarOpen(false);
     }
 
     function toggleCharacter(character) {
@@ -46,6 +31,7 @@ function Sidebar({
 
         setSelectedCharacters(nextSelection);
         setIsChatOpen(nextSelection.length > 0);
+        closeSidebar();
     }
 
     return (
@@ -60,7 +46,15 @@ function Sidebar({
                 </button>
             </div>
 
-            <button type="button" className="newBtn" onClick={onCreate}>
+            {/* <button type="button" className="newBtn" onClick={onCreate}> */}
+            <button
+    type="button"
+    className="newBtn"
+    onClick={() => {
+        onCreate();
+        closeSidebar();
+    }}
+>
                 <FaPlus />
                 New Character
             </button>
@@ -98,6 +92,17 @@ function Sidebar({
                                 className={`characterCard ${isSelected ? "selected" : ""}`}
                                 onClick={() => toggleCharacter(character)}
                             >
+                                <label
+                                    className="characterSelect"
+                                    onClick={(event) => event.stopPropagation()}
+                                    aria-label={`Select ${character.name || "character"}`}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={() => toggleCharacter(character)}
+                                    />
+                                </label>
                                 <div className="characterAvatar">
                                     {(character.name || "A").slice(0, 1).toUpperCase()}
                                 </div>

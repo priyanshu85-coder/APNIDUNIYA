@@ -34,7 +34,12 @@
     font-weight: 600;
 }
 
-.inputBox select {
+.recipientPicker {
+    position: relative;
+    min-width: 180px;
+}
+
+.recipientPicker summary {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -42,6 +47,60 @@
     background: #2f3138;
     color: white;
     box-sizing: border-box;
+    cursor: pointer;
+    list-style: none;
+}
+
+.recipientPicker summary::-webkit-details-marker {
+    display: none;
+}
+
+.recipientMenu {
+    position: absolute;
+    z-index: 10;
+    bottom: calc(100% + 8px);
+    left: 0;
+    width: max-content;
+    min-width: 220px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: #2f3138;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.3);
+}
+
+.recipientMenu button,
+.recipientMenu label {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 10px;
+    color: white;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.recipientMenu button {
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+}
+
+.recipientMenu button:hover,
+.recipientMenu label:hover {
+    background: rgba(16, 163, 127, 0.24);
+}
+
+.recipientMenu input {
+    width: auto;
+    accent-color: #10a37f;
+}
+
+.inputBox button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 @media (max-width: 768px) {

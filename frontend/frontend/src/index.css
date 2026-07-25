@@ -584,6 +584,10 @@ button:hover {
   padding: 22px;
 }
 
+.sidebarBackdrop {
+  display: none;
+}
+
 .mobileToolbar {
   display: none;
   align-items: center;
@@ -679,6 +683,17 @@ button:hover {
 }
 
 @media (max-width: 768px) {
+  .sidebarBackdrop {
+    position: absolute;
+    inset: 58px 0 0;
+    z-index: 70;
+    display: block;
+    border: 0;
+    padding: 0;
+    background: rgba(2, 6, 23, 0.38);
+    cursor: default;
+  }
+
   .container {
     flex-direction: row;
     height: 100dvh;

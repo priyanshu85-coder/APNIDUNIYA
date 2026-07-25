@@ -6,14 +6,26 @@ import "./ChatBox.css";
 
 function ChatBox({ characters }) {
     const [messages, setMessages] = useState([]);
+    // null means every character currently selected in the sidebar.
+    const [recipientIds, setRecipientIds] = useState(null);
     const messagesEndRef = useRef(null);
+    const recipients = recipientIds === null
+        ? characters
+        : characters.filter((character) => recipientIds.includes(character.id));
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     }, [messages]);
 
-    async function sendMessage(question, targetCharacter) {
-        const effectiveTarget = targetCharacter || null;
+    useEffect(() => {
+        setRecipientIds((currentIds) => {
+            if (currentIds === null) return null;
+
+            return currentIds.filter((id) => characters.some((character) => character.id === id));
+        });
+    }, [characters]);
+
+    async function sendMessage(question) {
         const userMessage = {
             sender: "user",
             text: question,
@@ -24,7 +36,7 @@ function ChatBox({ characters }) {
         try {
             const payload = {
                 question,
-                characters: effectiveTarget ? [effectiveTarget] : characters,
+                characters: recipients,
             };
 
             const response = await api.post("/chat", payload);
@@ -43,7 +55,9 @@ function ChatBox({ characters }) {
     return (
         <div className="chatContainer">
             <div className="chatHeader">
-                <span>Chat with {characters.map((c) => c.name).join(", ") || "selected characters"}</span>
+                <span>
+                    Chat with {recipients.map((character) => character.name).join(", ") || "selected characters"}
+                </span>
                 <button type="button" onClick={() => setMessages([])}>
                     New Chat
                 </button>
@@ -66,7 +80,8 @@ function ChatBox({ characters }) {
             <ChatInput
                 sendMessage={sendMessage}
                 selectedCharacters={characters}
-                onSelectCharacter={() => {}}
+                recipientIds={recipientIds}
+                onRecipientIdsChange={setRecipientIds}
             />
         </div>
     );

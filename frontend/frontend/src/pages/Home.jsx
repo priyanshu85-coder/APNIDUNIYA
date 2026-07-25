@@ -59,6 +59,19 @@ function Home() {
         loadCharacters();
     }, []);
 
+    // The sidebar is a mobile drawer, but it should always be available after returning to desktop.
+    useEffect(() => {
+        function openSidebarOnDesktop() {
+            if (window.innerWidth > 768) {
+                setIsSidebarOpen(true);
+            }
+        }
+
+        openSidebarOnDesktop();
+        window.addEventListener("resize", openSidebarOnDesktop);
+        return () => window.removeEventListener("resize", openSidebarOnDesktop);
+    }, []);
+
     // Clear login/signup fields every time auth page opens or switches between modes.
     useEffect(() => {
         if (screen === "auth") {
@@ -93,6 +106,7 @@ function Home() {
         setEditingCharacter(null);
         setShowCharacterForm(true);
         setIsChatOpen(false);
+        setIsSidebarOpen(false);
     }
 
     // Open the same character form with existing data for editing.
@@ -261,7 +275,7 @@ function Home() {
                                 <FaRocket />
                                 Get Started
                             </button>
-                            <button type="button" className="secondaryAction" onClick={() => setScreen("studio")}>
+                            <button type="button" className="secondaryAction" onClick={continueAsGuest}>
                                 <FaMagic />
                                 Try Studio
                             </button>
@@ -534,6 +548,14 @@ function Home() {
                     isSidebarOpen={isSidebarOpen}
                     setIsSidebarOpen={setIsSidebarOpen}
                 />
+                {isSidebarOpen && (
+                    <button
+                        type="button"
+                        className="sidebarBackdrop"
+                        aria-label="Close character sidebar"
+                        onClick={() => setIsSidebarOpen(false)}
+                    />
+                )}
 
                 <div className="main">
                     <div className={`mobileToolbar ${isSidebarOpen ? "sidebarVisible" : ""}`}>

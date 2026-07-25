@@ -1,37 +1,70 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import "./ChatInput.css";
 
-function ChatInput({ sendMessage, selectedCharacters, onSelectCharacter }) {
+function ChatInput({ sendMessage, selectedCharacters, recipientIds, onRecipientIdsChange }) {
     const [input, setInput] = useState("");
-    const [selectedCharacterId, setSelectedCharacterId] = useState("");
+    const recipientPickerRef = useRef(null);
+    const isAllSelected = recipientIds === null;
+    const selectedRecipients = isAllSelected
+        ? selectedCharacters
+        : selectedCharacters.filter((character) => recipientIds.includes(character.id));
+    const recipientLabel = isAllSelected
+        ? "All selected members"
+        : selectedRecipients.map((character) => character.name).join(", ") || "Choose members";
 
     function handleSend() {
-        if (!input.trim()) return;
+        if (!input.trim() || selectedRecipients.length === 0) return;
 
-        const target = selectedCharacters.find((character) => character.id === selectedCharacterId) || null;
-        sendMessage(input, target);
+        sendMessage(input);
         setInput("");
+    }
+
+    function toggleRecipient(characterId) {
+        if (isAllSelected) {
+            onRecipientIdsChange([characterId]);
+            recipientPickerRef.current?.removeAttribute("open");
+            return;
+        }
+
+        onRecipientIdsChange(
+            recipientIds.includes(characterId)
+                ? recipientIds.filter((id) => id !== characterId)
+                : [...recipientIds, characterId]
+        );
+        recipientPickerRef.current?.removeAttribute("open");
     }
 
     return (
         <div className="inputBox">
-            <select
-                value={selectedCharacterId}
-                onChange={(e) => {
-                    const nextValue = e.target.value;
-                    setSelectedCharacterId(nextValue);
-                    const target = selectedCharacters.find((character) => character.id === nextValue) || null;
-                    onSelectCharacter(target);
-                }}
-            >
-                <option value="">All selected characters</option>
-                {selectedCharacters.map((character) => (
-                    <option key={character.id} value={character.id}>
-                        {character.name}
-                    </option>
-                ))}
-            </select>
+            <details ref={recipientPickerRef} className="recipientPicker">
+                <summary>{recipientLabel}</summary>
+                <div className="recipientMenu">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            onRecipientIdsChange(null);
+                            recipientPickerRef.current?.removeAttribute("open");
+                        }}
+                    >
+                        Select all members
+                    </button>
+                    {selectedCharacters.map((character) => {
+                        const isSelected = isAllSelected || recipientIds.includes(character.id);
+
+                        return (
+                            <label key={character.id}>
+                                <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() => toggleRecipient(character.id)}
+                                />
+                                <span>{character.name}</span>
+                            </label>
+                        );
+                    })}
+                </div>
+            </details>
 
             <input
                 value={input}
@@ -44,7 +77,9 @@ function ChatInput({ sendMessage, selectedCharacters, onSelectCharacter }) {
                 }}
             />
 
-            <button onClick={handleSend}>Send</button>
+            <button type="button" onClick={handleSend} disabled={selectedRecipients.length === 0}>
+                Send
+            </button>
         </div>
     );
 }

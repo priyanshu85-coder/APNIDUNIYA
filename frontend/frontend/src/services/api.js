@@ -1,7 +1,18 @@
 import axios from "axios";
 
-const SESSION_STORAGE_KEY = "persona_session_id";
+const GUEST_SESSION_STORAGE_KEY = "persona_guest_session_id";
 const AUTH_STORAGE_KEY = "persona_auth_user";
+
+function getGuestSessionId() {
+    const existing = window.localStorage.getItem(GUEST_SESSION_STORAGE_KEY);
+    if (existing) {
+        return existing;
+    }
+
+    const generatedId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    window.localStorage.setItem(GUEST_SESSION_STORAGE_KEY, generatedId);
+    return generatedId;
+}
 
 // Returns the active storage session id used by the backend for private character data.
 function getSessionId() {
@@ -15,14 +26,7 @@ function getSessionId() {
         return authSession.session_id;
     }
 
-    const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
-    if (existing) {
-        return existing;
-    }
-
-    const generatedId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    window.localStorage.setItem(SESSION_STORAGE_KEY, generatedId);
-    return generatedId;
+    return getGuestSessionId();
 }
 
 // Read the saved logged-in user from browser storage.
@@ -77,9 +81,9 @@ api.interceptors.request.use((config) => {
     const authSession = getAuthSession();
 
     config.headers = config.headers || {};
-    config.headers["X-Session-Id"] = getSessionId();
+    config.headers["X-Session-Id"] = config.headers["X-Session-Id"] || getSessionId();
 
-    if (authSession?.access_token) {
+    if (!config.skipAuth && authSession?.access_token) {
         config.headers.Authorization = `Bearer ${authSession.access_token}`;
     }
 
@@ -98,7 +102,10 @@ export const login = (data) => {
 }
 
 export const guestLogin = () => {
-    return api.post("/auth/guest");
+    return api.post("/auth/guest", null, {
+        headers: { "X-Session-Id": getGuestSessionId() },
+        skipAuth: true,
+    });
 }
 
 // Character CRUD endpoints.
