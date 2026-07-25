@@ -27,7 +27,7 @@ app.include_router(chat_router)
 app.include_router(auth_router)
 # for health check 
 
-@app.api_route("/health", methods=["GET", "HEAD"])
+@app.api_route("/", methods=["GET", "HEAD"])
 def health():
     return Response(status_code=200)
 
