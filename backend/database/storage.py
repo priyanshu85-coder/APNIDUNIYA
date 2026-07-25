@@ -1,10 +1,7 @@
-import json
-import os
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "..", "data")
-SESSION_DIR = os.path.join(DATA_DIR, "sessions")
-os.makedirs(SESSION_DIR, exist_ok=True)
+try:
+    from .mongo import get_database
+except ImportError:
+    from mongo import get_database
 
 
 class ConversationMemory:
@@ -28,9 +25,8 @@ def _get_session_id(session_id=None):
     return session_id or "default"
 
 
-def _get_session_file(session_id=None):
-    safe_session_id = _get_session_id(session_id)
-    return os.path.join(SESSION_DIR, f"{safe_session_id}.json")
+def _characters_collection():
+    return get_database()["characters"]
 
 
 def get_memory(session_id=None):
@@ -41,17 +37,17 @@ def get_memory(session_id=None):
 
 
 def load_characters(session_id=None):
-    data_file = _get_session_file(session_id)
-    if not os.path.exists(data_file):
-        return []
-
-    with open(data_file, "r") as file:
-        return json.load(file)
+    # MongoDB Atlas stores one character document per user/session.
+    collection = _characters_collection()
+    document = collection.find_one({"session_id": _get_session_id(session_id)}, {"_id": 0, "characters": 1})
+    return document.get("characters", []) if document else []
 
 
 def save_characters(characters, session_id=None):
-    data_file = _get_session_file(session_id)
-    os.makedirs(os.path.dirname(data_file), exist_ok=True)
-
-    with open(data_file, "w") as file:
-        json.dump(characters, file, indent=4)
+    # Upsert replaces the active user's/session's character list in MongoDB.
+    collection = _characters_collection()
+    collection.update_one(
+        {"session_id": _get_session_id(session_id)},
+        {"$set": {"session_id": _get_session_id(session_id), "characters": characters}},
+        upsert=True,
+    )

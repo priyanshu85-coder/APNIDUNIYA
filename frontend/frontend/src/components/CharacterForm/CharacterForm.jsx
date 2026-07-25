@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaCheck, FaTimes, FaUserAstronaut } from "react-icons/fa";
 
 import "./CharacterForm.css";
 
@@ -27,15 +28,10 @@ function CharacterForm({ addCharacter, editCharacter, editingCharacter, cancelEd
     }, [editingCharacter]);
 
     function handleChange(e) {
-
         setForm({
-
             ...form,
-
-            [e.target.name]: e.target.value
-
+            [e.target.name]: e.target.value,
         });
-
     }
 
     function submit(e) {
@@ -54,76 +50,101 @@ function CharacterForm({ addCharacter, editCharacter, editingCharacter, cancelEd
     }
 
     return (
-
         <form className="characterForm" onSubmit={submit}>
+            <div className="formHeader">
+                <span className="formIcon">
+                    <FaUserAstronaut />
+                </span>
+                <div>
+                    <span className="eyebrow">{editingCharacter ? "Update persona" : "Create persona"}</span>
+                    <h2>{editingCharacter ? "Edit Character" : "New Character Form"}</h2>
+                    <p>Fill in the details that shape how this AI character thinks, speaks, and responds.</p>
+                </div>
+            </div>
 
-            <input
-                name="name"
-                placeholder="Name"
-                value={form.name}
-                onChange={handleChange}
-            />
+            <div className="formGrid">
+                <label>
+                    Name
+                    <input name="name" placeholder="e.g. Aarya" value={form.name} onChange={handleChange} required />
+                </label>
 
-            <input
-                name="gender"
-                placeholder="Gender"
-                value={form.gender}
-                onChange={handleChange}
-            />
+                <label>
+                    Gender
+                    <select name="gender" value={form.gender} onChange={handleChange}>
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Non-binary">Non-binary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
 
-            <input
-                name="age"
-                placeholder="Age"
-                value={form.age}
-                onChange={handleChange}
-            />
+                <label>
+                    Age
+                    <input
+                        name="age"
+                        type="number"
+                        min="0"
+                        placeholder="e.g. 24"
+                        value={form.age}
+                        onChange={handleChange}
+                    />
+                </label>
 
+                <label>
+                    Relationship
+                    <input
+                        name="relationship"
+                        placeholder="e.g. mentor, friend, guide"
+                        value={form.relationship}
+                        onChange={handleChange}
+                    />
+                </label>
+            </div>
 
-            <textarea
-                name="personality"
-                placeholder="Personality"
-                value={form.personality}
-                onChange={handleChange}
-            />
+            <label>
+                Personality
+                <textarea
+                    name="personality"
+                    placeholder="Describe tone, values, habits, and emotional style."
+                    value={form.personality}
+                    onChange={handleChange}
+                />
+            </label>
 
-        
+            <label>
+                Rules
+                <textarea
+                    name="rules"
+                    placeholder="What should this character always do or avoid?"
+                    value={form.rules}
+                    onChange={handleChange}
+                />
+            </label>
 
+            <label>
+                Example Conversation
+                <textarea
+                    name="example"
+                    placeholder="User: I feel stuck. Character: Let us slow down and find one small step."
+                    value={form.example}
+                    onChange={handleChange}
+                />
+            </label>
 
-            <textarea
-                name="relationship"
-                placeholder="Relationship"
-                value={form.relationship}
-                onChange={handleChange}
-            />
+            <div className="formActions">
+                <button type="submit">
+                    <FaCheck />
+                    {editingCharacter ? "Save Changes" : "Create Character"}
+                </button>
 
-            <textarea
-                name="rules"
-                placeholder="Rules"
-                value={form.rules}
-                onChange={handleChange}
-            />
-
-            <textarea
-                name="example"
-                placeholder="Example Conversation"
-                value={form.example}
-                onChange={handleChange}
-            />
-
-            <button type="submit">
-                {editingCharacter ? "Save Changes" : "Create Character"}
-            </button>
-
-            {editingCharacter && (
                 <button type="button" onClick={cancelEdit}>
+                    <FaTimes />
                     Cancel
                 </button>
-            )}
-
+            </div>
         </form>
-
     );
-
 }
 
 export default CharacterForm;

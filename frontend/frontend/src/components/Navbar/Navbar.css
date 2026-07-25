@@ -1,31 +1,212 @@
 .navbar {
-
-    height: 70px;
-
-    
-     justify-content: center;
-
+    position: relative;
+    z-index: 100;
+    height: 72px;
     display: flex;
-
     align-items: center;
-
-    padding: 0 24px;
-
-    color: rgb(25, 16, 156);
-
-    /* border-bottom: 1px solid rgba(43, 14, 157, 0.08); */
-
-    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18); */
+    justify-content: space-between;
+    gap: 18px;
+    padding: 0 28px;
+    background: rgba(7, 12, 24, 0.72);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+    color: #f8fafc;
+    flex: 0 0 auto;
 }
 
-.navbar h2 {
-    
-    font-size: 1.5rem;
+.publicNavbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.brandButton,
+.navActions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    border: none;
+    cursor: pointer;
     font-weight: 800;
-    letter-spacing: 0.02em;
-    background: linear-gradient(90deg, #3C8EF1, #7E6FF0, #C16AF3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+}
+
+.brandButton {
+    min-width: 0;
+    color: #f8fafc;
+    background: transparent;
+    font-size: 1.12rem;
+}
+
+.brandMark {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #14b8a6, #6366f1);
+    box-shadow: 0 12px 32px rgba(20, 184, 166, 0.24);
+}
+
+.navActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.navGhostButton,
+.navPrimaryButton,
+.profileButton {
+    min-height: 42px;
+    border-radius: 999px;
+    padding: 0 16px;
+    color: #f8fafc;
+}
+
+.navGhostButton {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.navPrimaryButton {
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    box-shadow: 0 14px 28px rgba(59, 130, 246, 0.25);
+    white-space: nowrap;
+}
+
+.createLabelShort {
+    display: none;
+}
+
+.profileMenu {
+    position: relative;
+}
+
+.profileButton {
+    background: rgba(255, 255, 255, 0.1);
+    max-width: 180px;
+}
+
+.profileButton span {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+}
+
+.profileButton strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profileDropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(270px, 82vw);
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.98);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.34);
+    z-index: 1000;
+}
+
+.profileDropdown strong,
+.profileDropdown span {
+    display: block;
+}
+
+.profileDropdown span {
+    margin-top: 4px;
+    color: #cbd5e1;
+    font-size: 0.86rem;
+    overflow-wrap: anywhere;
+}
+
+.profileDropdown button {
+    min-height: 40px;
+    justify-content: center;
+    border-radius: 999px;
+    color: white;
+    background: rgba(239, 68, 68, 0.88);
+}
+
+@media (max-width: 640px) {
+    .navbar {
+        height: 58px;
+        gap: 8px;
+        padding: 0 8px;
+    }
+
+    .brandMark {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+    }
+
+    .brandButton {
+        gap: 6px;
+        font-size: 0.95rem;
+        flex: 1 1 auto;
+    }
+
+    .brandButton span:last-child {
+        max-width: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .navGhostButton {
+        display: none;
+    }
+
+    .navPrimaryButton,
+    .profileButton {
+        min-height: 38px;
+        padding: 0 10px;
+        font-size: 0.82rem;
+    }
+
+    .navActions {
+        flex: 0 0 auto;
+        gap: 6px;
+    }
+
+    .createLabelFull {
+        display: none;
+    }
+
+    .createLabelShort {
+        display: inline;
+    }
+
+    .profileButton {
+        width: 42px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .profileButton strong {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .brandButton span:last-child {
+        display: none;
+    }
+
+    .navPrimaryButton {
+        padding: 0 9px;
+    }
 }

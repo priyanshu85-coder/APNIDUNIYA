@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Request
 
 try:
+    from ..database.storage import get_memory
     from ..models.request import ChatRequest
+    from ..security.jwt import get_session_id_from_request
     from ..services.gemini_service import ask_character
 except ImportError:
+    from database.storage import get_memory
     from models.request import ChatRequest
+    from security.jwt import get_session_id_from_request
     from services.gemini_service import ask_character
 
 router = APIRouter()
-
-
-def get_session_id(request: Request):
-    return request.headers.get("x-session-id") or request.headers.get("session-id") or "default"
 
 
 @router.post("/chat")
@@ -21,7 +21,7 @@ def chat(data: ChatRequest, request: Request):
     if not selected_characters:
         return {"answer": "No character selected."}
 
-    session_id = get_session_id(request)
+    session_id = get_session_id_from_request(request)
 
     formatted_answers = []
     for character in selected_characters:
@@ -32,3 +32,9 @@ def chat(data: ChatRequest, request: Request):
         })
 
     return {"answers": formatted_answers}
+
+
+@router.get("/conversation-history")
+def conversation_history(request: Request):
+    session_id = get_session_id_from_request(request)
+    return {"history": get_memory(session_id).get_history()}

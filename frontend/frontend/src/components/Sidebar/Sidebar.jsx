@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { FaCommentDots, FaEdit, FaPlus, FaTimes, FaTrashAlt, FaUserAstronaut } from "react-icons/fa";
 import "./Sidebar.css";
 
 function Sidebar({
     characters,
     selectedCharacters,
     setSelectedCharacters,
+    onCreate,
     onEdit,
     onDelete,
     onOpenChat,
@@ -36,26 +38,32 @@ function Sidebar({
             (item) => (item.id && character.id && item.id === character.id) || item.name === character.name
         );
 
-        let nextSelection;
-        if (exists) {
-            nextSelection = selectedCharacters.filter((item) => item.name !== character.name);
-        } else {
-            nextSelection = [...selectedCharacters, character];
-        }
+        const nextSelection = exists
+            ? selectedCharacters.filter(
+                  (item) => !((item.id && character.id && item.id === character.id) || item.name === character.name)
+              )
+            : [...selectedCharacters, character];
 
         setSelectedCharacters(nextSelection);
         setIsChatOpen(nextSelection.length > 0);
-        closeSidebar();
     }
 
     return (
-        <div className={`sidebar ${isSidebarOpen ? "" : "collapsed"}`}>
+        <aside className={`sidebar ${isSidebarOpen ? "" : "collapsed"}`}>
             <div className="sidebarHeader">
-                <h2>Characters</h2>
-                <button type="button" className="sidebarCloseBtn" onClick={closeSidebar}>
-                    ✕
+                <div>
+                    <span>Studio</span>
+                    <h2 className="character">Characters</h2>
+                </div>
+                <button type="button" className="sidebarCloseBtn" onClick={closeSidebar} aria-label="Close sidebar">
+                    <FaTimes />
                 </button>
             </div>
+
+            <button type="button" className="newBtn" onClick={onCreate}>
+                <FaPlus />
+                New Character
+            </button>
 
             {selectedCharacters.length > 0 && !isChatOpen && (
                 <button
@@ -66,34 +74,56 @@ function Sidebar({
                         closeSidebar();
                     }}
                 >
+                    <FaCommentDots />
                     Open Chat
                 </button>
             )}
 
-            {characters.map((character, index) => (
-                <div key={character.id || index} className="characterCard">
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={selectedCharacters.some(
-                                (item) => (item.id && character.id && item.id === character.id) || item.name === character.name
-                            )}
-                            onChange={() => toggleCharacter(character)}
-                        />
-                        {character.name}
-                    </label>
-
-                    <div className="characterActions">
-                        <button type="button" onClick={() => onEdit(character)}>
-                            Edit
-                        </button>
-                        <button type="button" onClick={() => onDelete(character)}>
-                            Delete
-                        </button>
+            <div className="characterList">
+                {characters.length === 0 ? (
+                    <div className="sidebarEmpty">
+                        <FaUserAstronaut />
+                        <p>No characters yet.</p>
                     </div>
-                </div>
-            ))}
-        </div>
+                ) : (
+                    characters.map((character, index) => {
+                        const isSelected = selectedCharacters.some(
+                            (item) =>
+                                (item.id && character.id && item.id === character.id) || item.name === character.name
+                        );
+
+                        return (
+                            <article
+                                key={character.id || index}
+                                className={`characterCard ${isSelected ? "selected" : ""}`}
+                                onClick={() => toggleCharacter(character)}
+                            >
+                                <div className="characterAvatar">
+                                    {(character.name || "A").slice(0, 1).toUpperCase()}
+                                </div>
+                                <div className="characterInfo">
+                                    <h3>{character.name || "Unnamed"}</h3>
+                                    <p>{character.relationship || character.personality || "Ready to chat"}</p>
+                                </div>
+
+                                <div className="characterActions" onClick={(e) => e.stopPropagation()}>
+                                    <button type="button" onClick={() => onEdit(character)} aria-label="Edit character">
+                                        <FaEdit />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => onDelete(character)}
+                                        aria-label="Delete character"
+                                    >
+                                        <FaTrashAlt />
+                                    </button>
+                                </div>
+                            </article>
+                        );
+                    })
+                )}
+            </div>
+        </aside>
     );
 }
 

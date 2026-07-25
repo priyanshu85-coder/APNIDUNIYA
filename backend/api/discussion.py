@@ -1,10 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 try:
     from ..models.character import Character
+    from ..security.jwt import get_session_id_from_request
     from ..services.gemini_service import ask_character
 except ImportError:
     from models.character import Character
+    from security.jwt import get_session_id_from_request
     from services.gemini_service import ask_character
 
 router = APIRouter(
@@ -14,7 +16,8 @@ router = APIRouter(
 
 
 @router.post("/")
-def discussion(characters: list[Character], question: str):
+def discussion(characters: list[Character], question: str, request: Request):
+    session_id = get_session_id_from_request(request)
 
     discussion = []
 
@@ -22,7 +25,8 @@ def discussion(characters: list[Character], question: str):
 
         answer = ask_character(
             character,
-            question
+            question,
+            session_id
         )
 
         discussion.append(

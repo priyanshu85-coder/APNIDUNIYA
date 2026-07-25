@@ -8,7 +8,9 @@
     overflow: hidden;
     border-radius: 14px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
-    background-image: url("../public/apni2.png");
+    background-image: linear-gradient(135deg, rgba(31, 41, 55, 0.86), rgba(17, 24, 39, 0.92)), url("/apni2.png");
+    background-size: cover;
+    background-position: center;
 
 }
 
